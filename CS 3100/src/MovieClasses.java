@@ -2,217 +2,255 @@ import java.lang.*;
 import java.util.*;
 public class MovieClasses {
 	Scanner keyboard = new Scanner(System.in);
-	
 
-	public void addValues(ArrayList<Movielist> ml, int Theatrenum[],String name[],double rating[], String desc[])
-	{
-		
-		for (int i=0; i<3; i++)
-		{
-			ml.add(new Movielist(Theatrenum[i], name[i], rating[i], desc[i]));
-		}
+	public static int binarySearch( ArrayList list, Object key ) {
+	    Comparable comp = (Comparable)key;
+
+	    int res = -1, min = 0, max = list.size() - 1, pos;
+	    while( ( min <= max ) && ( res == -1 ) ) {
+	        pos = (min + max) / 2;
+	        int comparison = comp.compareTo(pos);
+	        if( comparison == 0)
+	            res = pos;
+	        else if( comparison < 0)
+	            max = pos - 1;
+	        else
+	            min = pos + 1;
+	    }
+	    return res;
 	}
-	public void PrintMovie(ArrayList<Movielist> ml) 
+	public void PrintMovie(ArrayList<MovieList> ml) 								//prints the list of movies we have
 	{
 		System.out.println();
 		System.out.println("These are our movies!");
 		for(int i=0;i<ml.size();i++)
 		{
-			Movielist movielist1 = ml.get(i);
-			System.out.println(movielist1.Theatrenum + " " + movielist1.name);
+			MovieList movielist1 = ml.get(i);
+			System.out.println("Screen " + movielist1.gettheatrenum() + ". " + " " + movielist1.getName());
 
 		}
-		/*while(itr.hasNext()) //prints the movies
-		{	
-			Movielist ml =(Movielist)itr.next();
-				//System.out.print("Screen " + (i+1) + ". ");						//array position +1, since array position starts at 0
-				System.out.println(ml.movies);					//prints the movies
-		}
-		 Iterator itr=al.iterator();  
-
-	        //traverse elements of ArrayList object  
-	        while(itr.hasNext()){  
-	            Movielist mm=(Movielist)itr.next();  
-	            System.out.println(mm.Theatrenum+". "+mm.name);  
-	        } */ 
-		System.out.println(ml.size());
-		System.out.println();
-
-	}
-
-	public void DetailMovie(ArrayList<Movielist> ml, int Theatrenum[],String name[],double rating[], String desc[])
-	{
-		int input;
-		System.out.println();
-		System.out.println("Which movie would you like to see more detail about?");
-		input = keyboard.nextInt();
-		Movielist movielist1 = ml.get(input-1);
-		//System.out.println(movielist1.Theatrenum + " " + movielist1.name + movielist1.rating + movielist1.desc);
-		System.out.println(movielist1.name + " is located in theatre: " + movielist1.Theatrenum);
-		System.out.println("Rating: " + movielist1.rating + "/10");
-		System.out.println("Synopsis: \n\t" + movielist1.desc);
 		System.out.println();
 	}
-	public void AddMovie(ArrayList<Movielist> ml, int Theatrenum[],String name[],double rating[], String desc[]) 				//needs a way to catch for if user doesn't enter something properly
+
+	public void DetailMovie(ArrayList<MovieList> ml)			//gives details for the movie, This should be the binary search function
 	{
-		boolean tester = false;
-		int k =0;
-		/*do {
-			try {
-				System.out.println("How many movies do you want to add?");
-				k = keyboard.nextInt();											//asks for how many movies the user wants to add
-			}catch (InputMismatchException e)
-			{
-				System.out.println("Hey! That's not a valid number!");
-				keyboard.nextLine();											//asks for how many movies the user wants to add
-
-			}
-
-		}while(k<=0);*/
-		System.out.println("Please enter movies:");
-		String inputmovie = keyboard.nextLine();					//adds movie name
-
-		System.out.println("Please enter rating: (out of 10)");
-		double inputdouble = keyboard.nextDouble();					//adds movie rating //needs to catch errors
-		keyboard.nextLine();			//need after a nextInt or nextDouble to read the nextline
-		System.out.println("Please enter a description of the movie");
-		String inputdesc = keyboard.nextLine();			//adds movie desc
+		System.out.println();
+		System.out.println("Which movie number would you like to see more detail about?");
+		int movierequest = keyboard.nextInt();
+		int moviemod = binarySearch(ml, movierequest-1);						//searches for movie's positiong
+		System.out.println(ml.get(moviemod));
+		keyboard.nextLine();
+	}
+	public void AddMovie(ArrayList<MovieList> ml) 				//needs a way to catch for if user doesn't enter something properly
+	{
+		boolean tester=true;
+		String inputmovie = null;
+		double inputdouble = 0;
+		String inputdesc = null;
 		
-
-		//ml.add(new Movielist(Theatrenum[ml.size()], name[ml.size()], rating[ml.size()-1], desc[ml.size()-1]));		
-		ml.add(new Movielist(ml.size()+1, inputmovie, inputdouble, inputdesc));				//adds all elements of the movie. by default adds to new theatre
-		
-		System.out.println(ml.size());
-		System.out.println();
-	}
-
-	public void RemoveMovie(ArrayList movies)			//should be able to match the movies 
-	{
-		int k = 0;
+		System.out.println("Please enter the new movie name:");
+		inputmovie = keyboard.nextLine();					//adds movie name
 		do {
 			try {
-				System.out.println("How many movies do you want to remove?");
-				k = keyboard.nextInt();											//asks for how many movies the user wants to add
-			}catch (InputMismatchException e)
+				System.out.println("Please enter rating: (out of 10)");
+				inputdouble = keyboard.nextDouble();					//adds movie rating //needs to catch errors
+				keyboard.nextLine();			//need after a nextInt or nextDouble to read the nextline
+				if(inputdouble>10||inputdouble<0)
+					System.out.println("Invalid input, try again.");
+				tester=true;
+			}catch(InputMismatchException e)
 			{
-				System.out.println("Hey! That's not a valid number!");
-				keyboard.nextLine();											//asks for how many movies the user wants to add
+				tester = false;
+				System.out.println("Invalid input, try again. error");
+				keyboard.nextLine();
 			}
-
-		}while(k<=0);
-		System.out.println("What movies do you want to remove?");
-		System.out.println("(Please enter the movie name(s)):");
-		for(int count=-1; count<k; count++) 
-		{	
-			String input = keyboard.nextLine();
-			input = input.replaceAll("[^A-Za-z0-9]+", "").toUpperCase();  				//replaces whatever use inputs to all uppercases w no spaces
-			for(int i=0; i<movies.size(); i++)
-			{
-				String temp = ((String) movies.get(i)).replaceAll("[^A-Za-z0-9]+", "").toUpperCase();			//replaces movie titles temporarily as ALLUPPERCASE w numbers included
-				//System.out.println(temp);
-				if(temp.equals(input))
-				{
-					movies.remove(i);
-				}
-					
-			}
-		}
-	}
-
-	public void ModifyMovie(ArrayList movies)
-	{
-		System.out.println("What two movie numbers would you like to switch?");
-			int i = keyboard.nextInt();
-			i = i-1;
-			int j = keyboard.nextInt();
-			j = j-1;
-			//getting the indexes from user input and adjusting them from screen number
-			
-			if(i < 0 || i > movies.size() || j < 0 || j > movies.size())
-			{
-				System.out.println("Invalid input.");
-			} //check for invalid inputs
-			
-			else
-			{
-				String placeholder1 = ((String)movies.get(j));
-				String placeholder2 = ((String)movies.get(i));
-				//getting the strings from indexes i and j into placeholders to be swapped
-			
-				movies.remove(j);
-				movies.add(j, placeholder2);
-				movies.remove(i);
-				movies.add(i, placeholder1);
-				//swapping of strings
-			}
-	}
-
-
-	public void Search(ArrayList movies)
-	{
-	  boolean check = false;
-			System.out.println("What movie do you want to search for");
-			System.out.println("Please enter a movie name or names");
-				
-			String input = keyboard.nextLine();
-			input = input.replaceAll("[^A-Za-z0-9]+", "").toUpperCase(); 
-			
-			System.out.println("That movie is showing on: ");
-			
-			for(int i = 0; i<movies.size();i++)
-			{
-				String temp = ((String) movies.get(i)).replaceAll("[^A-Za-z0-9]+", "").toUpperCase();
-				
-				if(temp.equals(input))
-				{
-					System.out.print("screen " + (i+1) + " ");
-				   	check = true;
-				}
-				
-			}
-			if(!check)
-				System.out.print("no screens");
-			System.out.println();
-
-	}
-	/*public void DevMode(ArrayList movies)
-	{
-		System.out.println("Welcome to dev mode. Please enter an option.");
-		System.out.println("1. Add a movie");
-		System.out.println("2. Remove a movie");
-		System.out.println("3. Modify a movie");
-		System.out.println("0. Exit");
-		int input2 = keyboard.next().charAt(0);
+		}while(inputdouble>10||inputdouble<0 || tester==false);
+		System.out.println("Please enter a description of the movie");
+		inputdesc = keyboard.nextLine();			//adds movie desc
 		
-		switch(input2)
+		ml.add(new MovieList(ml.size()+1, inputmovie, inputdouble, inputdesc));				//adds all elements of the movie. by default adds to new theatre
+
+		System.out.println();
+	}
+
+	public void RemoveMovie(ArrayList<MovieList> ml)			//should be able to match the movies 
+	{
+		int input;
+		System.out.println("What movies do you want to remove?");
+		System.out.println("(Please enter the movie number):");
+		input = keyboard.nextInt();
+		int temp;
+		for(int i=input; i<ml.size();i++)
 		{
-		case '1':
-			AddMovie(movies);
-			PrintMovie(movies);
-			DevMode(movies);
-			break;
-		case '2':
-			PrintMovie(movies);
-			RemoveMovie(movies);
-			PrintMovie(movies);
-			DevMode(movies);
-			break;
-		case '3':
-			PrintMovie(movies);
-			ModifyMovie(movies);
-			PrintMovie(movies);
-			DevMode(movies);
-			break;
-		case '0':
-			break;
-		default:
-			System.out.println("You didn't put any of options!");
-			DevMode(movies);
-			break;
+			temp = ml.get(i).gettheatrenum();
+			ml.get(i).settheatrenum(temp-1);				//swaps the theatre numbers
+		}
+		ml.remove(input-1);
+		keyboard.nextLine();
+	}
+	
+	public void ModifyMovie(ArrayList<MovieList> ml)			//modify elements in the movies
+	{																//to use this you select the movies via numbers, and then type in your choice
+
+		boolean edited = false;						//check to see if it was edited, or else it doesn't show the updated info
+		
+		String elementedit;
+		System.out.println("What movie would you like to modify?");
+		int movierequest = keyboard.nextInt();
+		int moviemod = this.binarySearch(ml, movierequest-1);						//searches for movie's positiong
+		keyboard.nextLine();
+		System.out.println("What element would you like to modify?");
+		System.out.println("(Name, Rating, Description, Swap, or Exit)");			//gives the user options
+		String userchoice = keyboard.nextLine().toLowerCase();				//converts whatever it is that they user wrote into lowercase
+		
+		if(userchoice.equals("name")) {													//edits name
+			System.out.println("Please enter a new movie name");
+			elementedit = keyboard.nextLine();
+			ml.get(moviemod).setName(elementedit);
+			edited=true;
+		}
+		else if(userchoice.equals("rating"))											//edits rating
+		{
+			double ratingedit;
+			do {
+				System.out.println("Please enter the new rating:");
+				ratingedit = keyboard.nextDouble();
+				keyboard.nextLine();			//need after a nextInt or nextDouble to read the nextline
+				if(ratingedit>10||ratingedit<0)
+					System.out.println("Invalid input, try again.");
+			}while(ratingedit>10||ratingedit<0);
+			
+			ml.get(moviemod).setRating(ratingedit);
+			edited=true;
+
+		}
+		else if(userchoice.equals("description"))											//edits description
+		{
+			System.out.println("Please enter the new Description:");
+			elementedit = keyboard.nextLine();
+			ml.get(moviemod).setdesc(elementedit);
+			edited=true;
+
+		}
+		else if(userchoice.equals("exit"))								//exits the program
+		{
+			System.out.println("Okay!");
+		}
+		else if(userchoice.equals("swap"))				//swaps movie positions
+		{
+			System.out.println("Which movie would you like to swap it with?");
+			int editmoviename2 = keyboard.nextInt();
+			int moviemod2 = this.binarySearch(ml, editmoviename2-1);						//binary searches the movie position
+			keyboard.nextLine();
+
+			int tempa = ml.get(moviemod).gettheatrenum();
+			int tempb = ml.get(moviemod2).gettheatrenum();
+
+			Collections.swap(ml, moviemod, moviemod2);									//swaps two elements in arraylist
+			
+			ml.get(moviemod2).settheatrenum(tempb);				//swaps the theatre numbers
+			ml.get(moviemod).settheatrenum(tempa);				//swaps the theatre numbers
+
+		}
+		else {
+			System.out.println("Hey, that's not a choice!");
+			}
+		if (edited == true) {
+			System.out.println("Here is what has been edited:");
+			System.out.println(ml.get(moviemod));
+			System.out.println();
 		}
 	}
 
-*/
+	public void ratingSort(ArrayList<MovieList> ml, int lSize, int loopcount)
+	{
+		int istart = 0;
+		int j;
+		for(int i = istart; i < lSize-1; i++)
+		{
+			j = i+1;
+			MovieList movielist1 = ml.get(j);
+			MovieList movielist2 = ml.get(i);
+			double ratingj = movielist1.getrating();
+			double ratingi = movielist2.getrating();
+			if(ratingj>ratingi)
+			{
+				int numPlace = movielist1.gettheatrenum();		//placeholders for values
+				String namePlace = movielist1.getName();
+				double ratingPlace = movielist1.getrating();
+				String descPlace = movielist1.getdesc();
+				ml.get(j).settheatrenum(movielist2.gettheatrenum());	//swapping values for all the information
+				ml.get(i).settheatrenum(numPlace);
+				ml.get(j).setName(movielist2.getName());
+				ml.get(i).setName(namePlace);
+				ml.get(j).setRating(movielist2.getrating());
+				ml.get(i).setRating(ratingPlace);
+				ml.get(j).setdesc(movielist2.getdesc());
+				ml.get(i).setdesc(descPlace);
+			}
+			
+		}
+		if(lSize > loopcount)
+		{
+			loopcount++;
+			ratingSort(ml, lSize, loopcount);				//recursion to make sure list is fully ordered
+		}
+		
+		
+	}
+	
+	public void ratingPrint(ArrayList<MovieList> ml)
+	{
+		System.out.println();
+		System.out.println("These are our movies!");
+		for(int i=0;i<ml.size();i++)
+		{
+			MovieList movielist1 = ml.get(i);
+			System.out.println("Screen " + movielist1.gettheatrenum() + ". " + " " + movielist1.getName());
+			System.out.println("           Rating: " + movielist1.getrating());
+
+		}
+		System.out.println();
+	}
+
+public void theaterSort(ArrayList<MovieList> ml, int lSize, int loopcount)
+	{
+		int istart = 0;
+		int j;
+		for(int i = istart; i < lSize-1; i++)
+		{
+			j = i+1;
+			MovieList movielist1 = ml.get(j);
+			MovieList movielist2 = ml.get(i);
+			int theaterj = movielist1.gettheatrenum();
+			int theateri = movielist2.gettheatrenum();
+			if(theaterj < theateri)
+			{
+				int numPlace = movielist1.gettheatrenum();				//placeholders for values
+				String namePlace = movielist1.getName();
+				double ratingPlace = movielist1.getrating();
+				String descPlace = movielist1.getdesc();
+				ml.get(j).settheatrenum(movielist2.gettheatrenum());	//swapping values for all the information
+				ml.get(i).settheatrenum(numPlace);
+				ml.get(j).setName(movielist2.getName());
+				ml.get(i).setName(namePlace);
+				ml.get(j).setRating(movielist2.getrating());
+				ml.get(i).setRating(ratingPlace);
+				ml.get(j).setdesc(movielist2.getdesc());
+				ml.get(i).setdesc(descPlace);
+			}
+			
+		}
+		if(lSize > loopcount)
+		{
+			loopcount++;
+			theaterSort(ml, lSize, loopcount);				//recursion to make sure list is fully ordered
+		}
+	}
+
+
+	
+	
 	
 }
 
