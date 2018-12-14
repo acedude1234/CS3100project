@@ -51,6 +51,7 @@ public class MovieMain {
 					printfunc.PrintMovie(ml);
 					printfunc.RemoveMovie(ml);
 					printfunc.PrintMovie(ml);
+
 					break;
 				case 4:
 					printfunc.PrintMovie(ml);
@@ -76,9 +77,10 @@ public class MovieMain {
 				}
 			
 			}catch(InputMismatchException e) {		//catches if one of the choices wasn't a number
-				System.out.println("You didn't put a valid choice!");
+				System.out.println("You didn't put a valid choice!\n");
 			}
-				keyboard.nextLine();
+			keyboard.nextLine();
+
 
 		}while (-1 <= input && input <= 6);		//runs as long as input is between -1 and 6
 	}

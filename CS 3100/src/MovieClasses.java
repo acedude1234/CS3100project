@@ -75,10 +75,23 @@ public class MovieClasses {
 
 	public void RemoveMovie(ArrayList<MovieList> ml)			//should be able to match the movies 
 	{
-		int input;
-		System.out.println("What movies do you want to remove?");
-		System.out.println("(Please enter the movie number):");
-		input = keyboard.nextInt();
+		int input = 4;
+		boolean tester=true;
+		do {
+			try {
+			System.out.println("What movies do you want to remove?");
+			System.out.println("(Please enter the movie number):");
+			input = keyboard.nextInt();
+			keyboard.nextLine();
+			tester=true;
+			}catch(InputMismatchException e)
+			{
+				tester = false;
+				keyboard.nextLine();
+
+				System.out.println("Invalid input, try again. error");
+			}
+		}while(input<1 || input >ml.size() || tester == false);
 		int temp;
 		for(int i=input; i<ml.size();i++)
 		{
@@ -86,7 +99,6 @@ public class MovieClasses {
 			ml.get(i).settheatrenum(temp-1);				//swaps the theatre numbers
 		}
 		ml.remove(input-1);
-		keyboard.nextLine();
 	}
 	
 	public void ModifyMovie(ArrayList<MovieList> ml)			//modify elements in the movies

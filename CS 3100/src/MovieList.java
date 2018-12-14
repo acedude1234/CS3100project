@@ -55,7 +55,7 @@ public class MovieList
     @Override
     public String toString() {
     	return "\n" + this.name + " is located in theatre number: " + this.theatrenum +"\n" +
-    			"Rating: " + this.rating + "/10, or " + (Math.floor(this.rating*100)/10) + "%\n" +
+    			"Rating: " + this.rating + "/10, or " + ((int)(this.rating*100)/10) + "%\n" +
     			"Synopsis:\n" + this.desc + "\n";
     }
 }
